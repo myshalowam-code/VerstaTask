@@ -1,0 +1,14 @@
+@Versta.Auth.Api_HostAddress = http://localhost:5001
+
+GET {{Versta.Auth.Api_HostAddress}}/health
+Accept: application/json
+
+###
+
+POST {{Versta.Auth.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "demo@versta.local",
+  "password": "Demo123!"
+}
