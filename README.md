@@ -12,6 +12,7 @@
 - Сервис заказов CQRS + EventSourcing. БД Postgres + Mongo
 - Сервис асинхронной синхронизации Posrgres и Mongo через kafka.
 - Frontend на react
+- Добавил CI
 
 
 Опишу чуть детальнее:
@@ -26,7 +27,7 @@
 
 ## Быстрый запуск
 
-Понадобится только Docker Desktop с Docker Compose.
+Понадобится только запустить команду:
 
 ```bash
 docker compose up --build
@@ -78,7 +79,7 @@ npm run dev
 ./scripts/run-integration-tests.sh
 ```
 
-Скрипт создаёт уникальный Docker Compose project и поднимает отдельные PostgreSQL, MongoDB, Kafka, migration-контейнеры, Auth API, Orders API, projection worker и Gateway. Тестовый контейнер проверяет:
+Скрипт создаёт Docker Compose project и поднимает отдельные PostgreSQL, MongoDB, Kafka, migration-контейнеры, Auth API, Orders API, projection worker и Gateway. Тестовый контейнер проверяет:
 
 - обязательность JWT для Orders API;
 - отказ при неверном пароле;
@@ -91,14 +92,6 @@ npm run dev
 
 Integration-проект добавлен в solution-папку `Tests`. Обычный `dotnet test Versta.Delivery.sln` запускает unit-тесты, а Docker-тесты отмечает как `Skipped`, если отсутствует `GATEWAY_BASE_URL`; поэтому инфраструктура не поднимается неявно и локальная dev-база не изменяется.
 
-## GitLab CI/CD
-
-Pipeline описан в `.gitlab-ci.yml` и содержит два независимых job в одной стадии:
-
-- `unit_tests` запускает только `Versta.Orders.Domain.Tests` в .NET SDK-контейнере;
-- `integration_tests` поднимает отдельное Docker Compose-окружение и запускает только `Versta.IntegrationTests`.
-
-Оба job публикуют JUnit-отчёты в GitLab и могут выполняться параллельно. Для integration job GitLab Runner должен поддерживать Docker-in-Docker в privileged mode. На GitLab.com можно использовать runner с поддержкой DinD, а для собственного runner потребуется включить `privileged = true` в его конфигурации.
 
 ## GitHub Actions
 
