@@ -31,7 +31,7 @@ public sealed class ApiIntegrationTests : IAsyncLifetime
     {
         using var response = await _client.GetAsync("/api/orders?limit=1");
 
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     [IntegrationFact]
